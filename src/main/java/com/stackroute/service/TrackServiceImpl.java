@@ -2,6 +2,7 @@ package com.stackroute.service;
 
 import com.stackroute.domain.Track;
 import com.stackroute.repository.TrackRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +14,7 @@ public class TrackServiceImpl implements TrackService {
 
     private TrackRepository trackRepository;
 
+    @Autowired
     public TrackServiceImpl(TrackRepository trackRepository) {
         this.trackRepository = trackRepository;
     }
@@ -49,5 +51,11 @@ public class TrackServiceImpl implements TrackService {
         Track updateTrack= trackRepository.save(track);
         return updateTrack;
 
+    }
+
+    @Override
+    public List<Track> getTracksByName(List<String> name) {
+        List<Track> listOfTracks = trackRepository.findByName(name);
+        return listOfTracks;
     }
 }
