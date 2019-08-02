@@ -52,8 +52,8 @@ public class TrackController {
         return new ResponseEntity<>(updateTrack,HttpStatus.OK);
     }
     @GetMapping("tracks/{name}")
-    public ResponseEntity<?> getTrackByName(@PathVariable List<String> name){
-        List<Track> getTrackByName = trackService.getAllTracks();
+    public ResponseEntity<?> getTrackByName(@PathVariable String name){
+        List<Track> getTrackByName = trackService.getTrackByName(name);
         return new ResponseEntity<>(getTrackByName,HttpStatus.OK);
     }
 

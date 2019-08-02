@@ -54,8 +54,8 @@ public class TrackServiceImpl implements TrackService {
     }
 
     @Override
-    public List<Track> getTracksByName(List<String> name) {
-        List<Track> listOfTracks = trackRepository.findByName(name);
+    public List<Track> getTrackByName(String name) {
+        List<Track> listOfTracks = trackRepository.getTrackByName(name);
         return listOfTracks;
     }
 }
