@@ -8,8 +8,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @SpringBootApplication
 public class TrackServiceApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(TrackServiceApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(TrackServiceApplication.class, args);
+    }
 
 }
