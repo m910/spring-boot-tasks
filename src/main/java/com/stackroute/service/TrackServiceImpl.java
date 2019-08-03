@@ -4,6 +4,8 @@ import com.stackroute.domain.Track;
 import com.stackroute.exceptions.TrackAlreadyExistsException;
 import com.stackroute.repository.TrackRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,6 +13,10 @@ import java.util.Optional;
 
 
 @Service
+//@Primary is used to give preference when more than one beans are present
+@Primary
+//@Qualifier is used to specify which should be autowired on field
+@Qualifier("main")
 public class TrackServiceImpl implements TrackService {
 
     private TrackRepository trackRepository;
