@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-@Profile("value1")
+
 @Service
 //@profile is used to compose @Bean
 

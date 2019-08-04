@@ -26,7 +26,7 @@ public class TrackController {
         this.trackService = trackService;
     }
 
-    @Profile("value1")
+    
     @PostMapping("track")
     public ResponseEntity<?> setTrack(@RequestBody Track track) throws TrackAlreadyExistsException{
         Track savedTrack = trackService.saveTrack(track);
