@@ -6,17 +6,20 @@ import com.stackroute.repository.TrackRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-
+@Profile("value1")
 @Service
+//@profile is used to compose @Bean
+
 //@Primary is used to give preference when more than one beans are present
-@Primary
+//@Primary
 //@Qualifier is used to specify which should be autowired on field
-@Qualifier("main")
+//@Qualifier("main")
 public class TrackServiceImpl implements TrackService {
 
     private TrackRepository trackRepository;

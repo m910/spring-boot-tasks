@@ -3,8 +3,11 @@ package com.stackroute.controller;
 import com.stackroute.domain.Track;
 import com.stackroute.exceptions.TrackAlreadyExistsException;
 import com.stackroute.exceptions.TrackNotFoundException;
+import com.stackroute.repository.TrackRepository;
 import com.stackroute.service.TrackService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -15,16 +18,15 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1")
 public class TrackController {
-    TrackService trackService;
-
-    public TrackController() {
-    }
+    private TrackService trackService;
+    private TrackRepository trackRepository;
 
     @Autowired
-    public TrackController(TrackService trackService) {
+    public TrackController( @Qualifier("dummy") TrackService trackService) {
         this.trackService = trackService;
     }
 
+    @Profile("value1")
     @PostMapping("track")
     public ResponseEntity<?> setTrack(@RequestBody Track track) throws TrackAlreadyExistsException{
         Track savedTrack = trackService.saveTrack(track);
