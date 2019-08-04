@@ -10,7 +10,9 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-@Profile("value")
+import java.util.Optional;
+
+//@Profile("value")
 @Service
 //@profile is used to compose @Bean
 
@@ -25,31 +27,48 @@ public class TrackDummyServiceImpl implements TrackService{
 
     @Override
     public Track saveTrack(Track track) throws TrackAlreadyExistsException {
-        return null;
+        if (trackRepository.existsById(track.getId())) {
+            throw new TrackAlreadyExistsException("User already exists");
+        }
+        Track savedTrack = trackRepository.save(track);
+        return savedTrack;
+
     }
 
     @Override
     public Track getTrackById(int id) {
-        return null;
+        Track retrieveTrackById = trackRepository.findById(id).get();
+        return retrieveTrackById;
+
     }
 
     @Override
     public List<Track> getAllTracks() {
-        return null;
+        List<Track> retrieveTrack = trackRepository.findAll();
+        return retrieveTrack;
+
     }
 
     @Override
     public Track deleteTrackById(int id) {
-        return null;
+        Optional<Track> optionalTrack = trackRepository.findById(id);
+        trackRepository.deleteById(id);
+        return optionalTrack.get();
+
     }
 
     @Override
     public Track updateTrackById(int id, Track track) {
-        return null;
+        Optional<Track> optionalTrack = trackRepository.findById(id);
+        Track updateTrack = trackRepository.save(track);
+        return updateTrack;
+
     }
 
     @Override
     public List<Track> getTrackByName(String name) {
-        return null;
+        List<Track> trackList = trackRepository.getTrackByName(name);
+        return trackList;
+
     }
 }
