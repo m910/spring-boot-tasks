@@ -10,7 +10,8 @@ import java.util.List;
 
 @Repository
 public interface TrackRepository extends MongoRepository<Track, Integer> {
-//    @Query(value = "select t from Track t where t.name=?")
-//    public List<Track> getTrackByName(String name);
+   // @Query(value = "select t from Track t where t.name=?")
+   public List<Track> findByName(String name);
+
 
 }
