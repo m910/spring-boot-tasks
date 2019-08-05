@@ -21,12 +21,13 @@ public class TrackController {
     private TrackService trackService;
     private TrackRepository trackRepository;
 
-    @Autowired
-    public TrackController( @Qualifier("dummy") TrackService trackService) {
-        this.trackService = trackService;
-    }
+//    @Autowired
+//    public TrackController( @Qualifier("dummy") TrackService trackService) {
+//        this.trackService = trackService;
+//    }
 
-    
+    @Autowired
+    public TrackController(TrackService trackService){this.trackService=trackService;}
     @PostMapping("track")
     public ResponseEntity<?> setTrack(@RequestBody Track track) throws TrackAlreadyExistsException{
         Track savedTrack = trackService.saveTrack(track);
