@@ -70,10 +70,10 @@ public class TrackServiceImpl implements TrackService {
 
     }
 
-    @Override
+  /*  @Override
     public List<Track> getTrackByName(String name) {
         List<Track> trackList = trackRepository.getTrackByName(name);
         return trackList;
 
-    }
+    }*/
 }
