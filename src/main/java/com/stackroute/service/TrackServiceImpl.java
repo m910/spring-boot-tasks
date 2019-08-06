@@ -2,11 +2,9 @@ package com.stackroute.service;
 
 import com.stackroute.domain.Track;
 import com.stackroute.exceptions.TrackAlreadyExistsException;
+import com.stackroute.exceptions.TrackNotFoundException;
 import com.stackroute.repository.TrackRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,44 +34,72 @@ public class TrackServiceImpl implements TrackService {
             throw new TrackAlreadyExistsException("User already exists");
         }
         Track savedTrack = trackRepository.save(track);
+        if(trackRepository.existsById(track.getId())){
+            throw new TrackAlreadyExistsException("track already exists");
+        }
+        else{
+            savedTrack = trackRepository.save(track);
+            if(savedTrack == null){
+                throw new TrackAlreadyExistsException("user already exists");
+            }
+        }
         return savedTrack;
 
     }
 
 
     @Override
-    public Track getTrackById(int id) {
-        Track retrieveTrackById = trackRepository.findById(id).get();
-        return retrieveTrackById;
+    public Track getTrackById(int id) throws TrackNotFoundException {
+        if (!trackRepository.existsById(id)) {
+            throw new TrackNotFoundException("not found");
+        }
+        Track retriveTrack = trackRepository.findById(id).get();
+        return retriveTrack;
     }
 
     @Override
-    public List<Track> getAllTracks() {
-        List<Track> retrieveTrack = trackRepository.findAll();
-        return retrieveTrack;
+    public List<Track> getAllTracks() throws Exception {
+        if (trackRepository.findAll().isEmpty()) {
+            throw new Exception("Internal server error");
+        } else {
+            List<Track> allTracks = trackRepository.findAll();
+            return allTracks;
+        }
 
     }
 
 
     @Override
-    public Track deleteTrackById(int id) {
-        Optional<Track> optionalTrack = trackRepository.findById(id);
-        trackRepository.deleteById(id);
-        return optionalTrack.get();
+    public Track deleteTrackById(int id) throws TrackNotFoundException{
+        if (trackRepository.existsById(id)) {
+            Track retrivedTrack = trackRepository.findById(id).get();
+            trackRepository.deleteById(id);
+            return retrivedTrack;
+        } else {
+            throw new TrackNotFoundException("Track not found");
+        }
     }
 
     @Override
-    public Track updateTrackById(int id, Track track) {
-        Optional<Track> optionalTrack = trackRepository.findById(id);
-        Track updateTrack = trackRepository.save(track);
-        return updateTrack;
+    public Track updateTrackById(int id, Track track) throws TrackNotFoundException {
+        if (!trackRepository.existsById(id)) {
+            throw new TrackNotFoundException("track not found");
+        }
+        Track updateTrackById = trackRepository.findById(id).get();
+        updateTrackById.setId(track.getId());
+        updateTrackById.setName(track.getName());
+        updateTrackById.setComments(track.getComments());
+        return updateTrackById;
 
     }
 
    @Override
-    public List<Track> getByName(String name) {
-        List<Track> trackList = trackRepository.findByName(name);
-        return trackList;
-
+    public List<Track> getByName(String name) throws Exception {
+       if (trackRepository.findByName(name).isEmpty()) {
+           throw new Exception("no track with this name");
+       } else {
+           List<Track> allTracksByName = trackRepository.findByName(name);
+           return allTracksByName;
+       }
+   }
     }
-}

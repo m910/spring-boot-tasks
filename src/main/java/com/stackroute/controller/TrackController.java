@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1")
@@ -30,40 +31,53 @@ public class TrackController {
     public TrackController(TrackService trackService){this.trackService=trackService;}
     @PostMapping("track")
     public ResponseEntity<?> setTrack(@RequestBody Track track) throws TrackAlreadyExistsException{
-        Track savedTrack = trackService.saveTrack(track);
-        return new ResponseEntity<>(savedTrack, HttpStatus.OK);
-    }
+        ResponseEntity responseEntity;
+        try {
+            trackService.saveTrack(track);
+            responseEntity = new ResponseEntity<String>("Successfully Created", HttpStatus.CREATED);
+        } catch (TrackAlreadyExistsException e) {
+            System.out.println("msg" + e.getMessage());
+            responseEntity = new ResponseEntity<String>(e.getMessage(),HttpStatus.CONFLICT);
+            e.printStackTrace();
+        }
+        return responseEntity;
 
-    @GetMapping("track/{id}")
-    public ResponseEntity<?> getTrackById(@PathVariable int id) {
-        System.out.println(id);
-        Track retrievedTrack = trackService.getTrackById(id);
-        return new ResponseEntity<>(retrievedTrack, HttpStatus.OK);
     }
 
     @GetMapping("tracks")
-    public ResponseEntity<?> getAllTracks() {
-        List<Track> retrieveTrack = trackService.getAllTracks();
-        return new ResponseEntity<>(retrieveTrack, HttpStatus.OK);
+    //to get the List of track
+    public ResponseEntity<?> getAllTracks() throws Exception {
+        ResponseEntity responseEntity;
+        responseEntity = new ResponseEntity<List<Track>>(trackService.getAllTracks(), HttpStatus.OK);
+        return responseEntity;
+    }
+    @GetMapping("track/{id}")
+    public ResponseEntity<?> getTrackById(@PathVariable int id) throws TrackNotFoundException {
+        ResponseEntity responseEntity;
+        Track retrivedTrack = trackService.getTrackById(id);
+        return new ResponseEntity<>(retrivedTrack, HttpStatus.CREATED);
     }
 
     @DeleteMapping("track/{id}")
-    public ResponseEntity<?> deleteTrackById(@PathVariable int id) {
-        Track deleteTrack = trackService.deleteTrackById(id);
-        return new ResponseEntity<>(deleteTrack, HttpStatus.OK);
-
+    public ResponseEntity<?> deleteById(@PathVariable("id") int id) throws TrackNotFoundException {
+        ResponseEntity responseEntity;
+        Track retrivedTrack = trackService.deleteTrackById(id);
+        return new ResponseEntity<>(retrivedTrack, HttpStatus.NO_CONTENT);
     }
-
     @PutMapping("track/{id}")
-    public ResponseEntity<?> updateTrackById(@PathVariable int id, @RequestBody Track track) {
-        Track updateTrack = trackService.updateTrackById(id, track);
-        return new ResponseEntity<>(updateTrack, HttpStatus.OK);
+    //to update the track
+    public ResponseEntity<?> updateTrackById(@PathVariable int id,Track track) throws TrackNotFoundException {
+        ResponseEntity responseEntity;
+        Track trackUpdated = trackService.updateTrackById(id,track);
+        responseEntity = new ResponseEntity<>(trackUpdated, HttpStatus.UPGRADE_REQUIRED);
+        return responseEntity;
     }
-
-   @GetMapping("tracks/{name}")
-    public ResponseEntity<?> getByName(@PathVariable String name) {
-        List<Track> track = trackService.getByName(name);
-        return new ResponseEntity<>(track, HttpStatus.OK);
+    @GetMapping("tracks/{name}")
+    //to get the track by name
+    public ResponseEntity<?> getFindByName(@PathVariable String name) throws Exception {
+        ResponseEntity responseEntity;
+        System.out.println(name);
+        List<Track> retrivedTrack = trackService.getByName(name);
+        return new ResponseEntity<>(retrivedTrack, HttpStatus.CREATED);
     }
-
 }
