@@ -55,7 +55,7 @@ public class TrackController {
     public ResponseEntity<?> getTrackById(@PathVariable int id) throws TrackNotFoundException {
         ResponseEntity responseEntity;
         Track retrivedTrack = trackService.getTrackById(id);
-        return new ResponseEntity<>(retrivedTrack, HttpStatus.CREATED);
+        return new ResponseEntity<>(retrivedTrack, HttpStatus.FOUND);
     }
 
     @DeleteMapping("track/{id}")
@@ -78,6 +78,6 @@ public class TrackController {
         ResponseEntity responseEntity;
         System.out.println(name);
         List<Track> retrivedTrack = trackService.getByName(name);
-        return new ResponseEntity<>(retrivedTrack, HttpStatus.CREATED);
+        return new ResponseEntity<>(retrivedTrack, HttpStatus.FOUND);
     }
 }
