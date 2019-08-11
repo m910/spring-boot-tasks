@@ -56,70 +56,85 @@ public class TrackControllerTest {
         list = new ArrayList<>();
         list.add(track);
     }
+     @After
+    public void tearDown() throws Exception {
+        trackService = null;
+        track =null;
+        trackController = null;
+
+    }
+
 
     @Test
-    public void saveTrack() throws Exception {
+    public void givenInputToSaveTrackAndGetTheOutput() throws Exception {
         when(trackService.saveTrack(any())).thenReturn(track);
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/track")
                 .contentType(MediaType.APPLICATION_JSON).content(asJsonString(track)))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andDo(MockMvcResultHandlers.print());
+        verify(trackService, times(1)).saveTrack(track);
 
 
     }
     @Test
-    public void saveTrackFailure() throws Exception {
+    public void givenInputToCheckTheSaveTrackFailure() throws Exception {
         when(trackService.saveTrack(any())).thenThrow(TrackAlreadyExistsException.class);
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/track")
                 .contentType(MediaType.APPLICATION_JSON).content(asJsonString(track)))
                 .andExpect(MockMvcResultMatchers.status().isConflict())
                 .andDo(MockMvcResultHandlers.print());
+        verify(trackService, times(1)).saveTrack(track);
     }
 
     @Test
-    public void getAllTracks() throws Exception {
+    public void givenInputToGetAllTracksInOutput() throws Exception {
         when(trackService.getAllTracks()).thenReturn(list);
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/tracks")
                 .contentType(MediaType.APPLICATION_JSON).content(asJsonString(track)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
+        verify(trackService, times(1)).getAllTracks();
 
     }
 
     @Test
-    public void getTrackById() throws Exception {
+    public void givenInputToGetTheTrackByIdAsOutput() throws Exception {
         when(trackService.getTrackById(anyInt())).thenReturn(track);
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/track/10")
                 .contentType(MediaType.APPLICATION_JSON).content(asJsonString(track)))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andDo(MockMvcResultHandlers.print());
+        verify(trackService, times(1)).getTrackById(anyInt());
 
     }
     @Test
-    public void deleteTrackById() throws Exception{
+    public void  givenInputToDeleteTheTrackByIdAndGetTheOutput() throws Exception{
         when(trackService.deleteTrackById(anyInt())).thenReturn(track);
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/track/10")
                 .contentType(MediaType.APPLICATION_JSON).content(asJsonString(track)))
                 .andExpect(MockMvcResultMatchers.status().isNoContent())
                 .andDo(MockMvcResultHandlers.print());
+        verify(trackService, times(1)).deleteTrackById(anyInt());
 
     }
     @Test
-    public void getUpdateTrackById() throws Exception{
+    public void givenInputToGetTheUpdatedTrackListByUpdatingTrackByIdAndGetOutput() throws Exception{
         when(trackService.updateTrackById(10,track)).thenReturn(track);
         mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/track/10")
                 .contentType(MediaType.APPLICATION_JSON).content(asJsonString(track)))
                 .andExpect(MockMvcResultMatchers.status().isUpgradeRequired())
                 .andDo(MockMvcResultHandlers.print());
+        verify(trackService, times(1)).updateTrackById(10,track);
 
     }
     @Test
-    public void getByName() throws Exception{
+    public void givenInputToGetTheTrackByNameAndGetOutput() throws Exception{
         when(trackService.getByName(anyString())).thenReturn(list);
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/tracks/Megha")
                 .contentType(MediaType.APPLICATION_JSON).content(asJsonString(track)))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andDo(MockMvcResultHandlers.print());
+        verify(trackService, times(1)).getByName(anyString());
 
     }
 
