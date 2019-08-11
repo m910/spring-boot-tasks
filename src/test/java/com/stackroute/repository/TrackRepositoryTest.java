@@ -29,12 +29,13 @@ public class TrackRepositoryTest {
 
     @org.junit.After
     public void tearDown() throws Exception {
+        track=null;
         trackRepository.deleteAll();
 
     }
 
     @Test
-    public void testSaveTrack() {
+    public void testGivenInputToSaveTrackAndGetTheOutput() {
         trackRepository.save(track);
         Track fetchTrack = trackRepository.findById(track.getId()).get();
         Assert.assertEquals(10, fetchTrack.getId());
@@ -42,7 +43,7 @@ public class TrackRepositoryTest {
     }
 
     @Test
-    public void testSaveTrackFailure() {
+    public void testGivenInputToCheckSaveTrackFailure() {
         Track testTrack = new Track(10, "Arijit", "Melodies song");
         trackRepository.save(track);
         Track fetchTrack = trackRepository.findById(track.getId()).get();
@@ -50,7 +51,7 @@ public class TrackRepositoryTest {
     }
 
     @Test
-    public void testGetAllTrack() {
+    public void givenInputToGetAllTrackListAsOutput() {
         Track track = new Track(10, "Arijit", "melodies song");
         Track track1 = new Track(10, "Arijit", "melodies song");
         trackRepository.save(track);
@@ -62,25 +63,32 @@ public class TrackRepositoryTest {
 
     }
     @Test
-    public void testGetTrackById(){
+    public void givenInputToGetTrackByIdAndGetOutputById(){
         trackRepository.save(track);
         Track fetchTrack = new Track(10,"Arijit","melodies song");
+        Assert.assertEquals(10, fetchTrack.getId());
     }
+    
     @Test
-    public void testDeleteTrackById(){
+    public void givenIdToDeleteTrackByIdAndToGetTheOutput(){
         trackRepository.delete(track);
         Track fetchTrack = new Track(10,"Arijit","Melodies song");
+        Assert.assertEquals(10, fetchTrack.getId());
     }
 
     @Test
-    public void testGetTrackByName(){
+    public void givenInputToGetTrackByNameAndGetTheOutputByName(){
         trackRepository.save(track);
-        Track fetchTrack = new Track(10,"Arijit","Melodies song");
+        Track fetchTrack = trackRepository.findByName(track.getName()).get(10);
+        Assert.assertEquals("Arijit", fetchTrack.getName());
+
     }
 
     @Test
-    public void testUpdateTrackById(){
+    public void givenInputToUpdateTrackByIdAndGetTheUpdatedTrackAsOutput(){
         trackRepository.save(track);
-        Track fetchTrack = new Track(10,"Arijit","Melodies song");
+         Track fetchTrack = trackRepository.findById(track.getId()).get();
+        Assert.assertEquals(10, fetchTrack.getId());
+       
     }
 }
